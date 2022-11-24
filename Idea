@@ -6,6 +6,7 @@ Features:
     -Ressources de construction
     -Argent
     -Point Scientifique
+    
   -Types de salles
     -Salle de début
     -Salle de recherche
@@ -19,10 +20,12 @@ Features:
     -Mission
     -Vendre les ressources sur le marché noir galactique
     -Usine interne
+    
   -Recherche:
     -Arbre de technologie
     -Nécessite ressources
     -Prend du temps
+    
   -Mode création
     -Ajout de salle
     -Ajout module
