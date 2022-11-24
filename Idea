@@ -1,0 +1,26 @@
+Jeu de gestion de station spatial
+Features:
+  -Différentes fin
+  -Evenement aléatoire
+  -Valeur importante:
+    -Ressources de construction
+    -Argent
+    -Point Scientifique
+  -Types de salles
+    -Salle de début
+    -Salle de recherche
+    -Forge
+    -Usine
+  -Money Making:
+    -Chasse d'astéroïdes
+    -Exploration planétaire
+    -Mission
+    -Vendre les ressources sur le marché noir galactique
+    -Usine interne
+  -Recherche:
+    -Arbre de technologie
+    -Nécessite ressources
+    -Prend du temps
+  -Mode création
+    -Ajout de salle
+    -Ajout module
