@@ -2,7 +2,7 @@
 
 ### Moteur:
 * Python
-* Bibliothèque: Pygame
+* Pygame
 
 ### Type de jeu:
 * Scénarisé
