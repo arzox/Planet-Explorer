@@ -14,6 +14,8 @@
 * [Craft](https://github.com/arzox/Trophy/blob/main/Idea/Craft.md)
 * [Construction Base](https://github.com/arzox/Trophy/blob/main/Idea/Build.md)
 * Inventaire
+* Lumière
+* Jour/Nuit
 * Pods De Survie a aller découvrir
 * Histoire
 * Décollage pour finir le jeu
