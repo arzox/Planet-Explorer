@@ -1,8 +1,10 @@
 # Planet Exploreur
 
-Moteur:
-  -Python
-  -Bibliothèque: Pygame
+### Moteur:
+
+-Python
+
+-Bibliothèque: Pygame
 
 Type de jeu:
   -Scénarisé
