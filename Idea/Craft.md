@@ -1,6 +1,7 @@
 ## Craft
 #### Specifications:
 * Workbench
+* Workbench dans l'inventaire ou Workbench à coté du spawn
 
 ## WorkBench
 #### Specifications:
@@ -8,3 +9,6 @@
 * Ressources nécéssaire
 * Craft Queue
 * Temps de craft
+
+## Items
+* Pioche
