@@ -4,7 +4,7 @@
 * Python
 * Bibliothèque: Pygame
 
-Type de jeu:
+### Type de jeu:
 * Scénarisé
 * Survie
 * Gestion
