@@ -11,8 +11,8 @@
 * Tile Map
  
 ### Features:
-* Craft
-* Construction Base
+* [Craft](https://github.com/arzox/Trophy/blob/main/Idea/Craft.md)
+* [Construction Base](https://github.com/arzox/Trophy/blob/main/Idea/Build.md)
 * Inventaire
 * Pods De Survie a aller découvrir
 * Histoire
