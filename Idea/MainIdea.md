@@ -19,4 +19,4 @@
 * Agriculture
 * Barre de Faim/Oxygène
 * Système de durabilité des outils
-* [Récolte](https://github.com/arzox/Trophy/blob/main/Idea/Harvesting.md)
+* [Harvesting](https://github.com/arzox/Trophy/blob/main/Idea/Harvesting.md)
