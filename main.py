@@ -16,7 +16,7 @@ class App:
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
-
+#ds
     def on_loop(self):
         pass
 
