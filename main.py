@@ -1,22 +1,21 @@
 import pygame
-from pygame.locals import *
 
-
-class App:
+class PlanetExplorer:
     def __init__(self):
         self._running = True
-        self._display_surf = None
-        self.size = self.weight, self.height = 640, 400
+        self._display = None
+        self.size = self.weight, self.height = 1080, 720
 
     def on_init(self):
         pygame.init()
-        self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
+        pygame.display.set_caption("Planet Explorer")
+        self._display = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
         self._running = True
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
-#ds
+
     def on_loop(self):
         pass
 
@@ -27,9 +26,7 @@ class App:
         pygame.quit()
 
     def on_execute(self):
-        if not self.on_init():
-            self._running = False
-
+        self.on_init()
         while self._running:
             for event in pygame.event.get():
                 self.on_event(event)
@@ -39,5 +36,5 @@ class App:
 
 
 if __name__ == "__main__":
-    theApp = App()
+    theApp = PlanetExplorer()
     theApp.on_execute()
