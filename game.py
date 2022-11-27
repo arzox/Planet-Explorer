@@ -10,8 +10,11 @@ class Game:
     def on_init(self):
         pygame.init()
         pygame.display.set_caption("Planet Explorer")
-        self._display = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
+        self._display = pygame.display.set_mode(self.size)
         self._running = True
+
+        #charger la carte
+        tmx_data = load_pygame('')
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
