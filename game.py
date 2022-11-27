@@ -2,18 +2,19 @@ import pygame
 from pytmx.util_pygame import load_pygame
 import pyscroll
 from player import Player
+import scipy
 
 
 class Game:
     def __init__(self):
         self._running = True
-        self._display = None
+        self.screen = None
         self.size = self.weight, self.height = 1080, 720
 
     def on_init(self):
         pygame.init()
         pygame.display.set_caption("Planet Explorer")
-        self._display = pygame.display.set_mode(self.size)
+        self.screen = pygame.display.set_mode(self.size)
         self._running = True
 
         #charger la carte
@@ -33,22 +34,23 @@ class Game:
     def handle_input(self):
         pressed = pygame.key.get_pressed()
         if pressed[pygame.K_UP]:
-            print("haut")
-        elif pressed[pygame.K_DOWN]:
-            print("bas")
-        elif pressed[pygame.K_LEFT]:
-            print("gauche")
-        elif pressed[pygame.K_RIGHT]:
-            print("droite")
+            self.player.move_up()
+        if pressed[pygame.K_DOWN]:
+            self.player.move_down()
+        if pressed[pygame.K_LEFT]:
+            self.player.move_left()
+        if pressed[pygame.K_RIGHT]:
+            self.player.move_right()
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
 
     def on_loop(self):
+        self.handle_input()
         self.group.update()
         self.group.center(self.player.rect)
-        self.group.draw(self._display)
+        self.group.draw(self.screen)
 
     def on_render(self):
         pygame.display.flip()
@@ -63,4 +65,6 @@ class Game:
                 self.on_event(event)
             self.on_loop()
             self.on_render()
+
+            pygame.time.Clock().tick(60)
         self.on_cleanup()
