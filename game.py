@@ -1,5 +1,8 @@
 import pygame
 from pytmx.util_pygame import load_pygame
+import pyscroll
+from player import Player
+
 
 class Game:
     def __init__(self):
@@ -14,17 +17,41 @@ class Game:
         self._running = True
 
         #charger la carte
-        tmx_data = load_pygame('')
+        tmx_data = load_pygame('assets/map/tilemap.tmx')
+        map_data = pyscroll.data.TiledMapData(tmx_data)
+        map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.size)
+        map_layer.zoom = 4
+
+        #generer un joueur
+        player_spawn = tmx_data.get_object_by_name("PlayerSpawn")
+        self.player = Player(player_spawn.x,player_spawn.y)
+
+        #dessiner groupe de calque
+        self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=3)
+        self.group.add(self.player)
+
+    def handle_input(self):
+        pressed = pygame.key.get_pressed()
+        if pressed[pygame.K_UP]:
+            print("haut")
+        elif pressed[pygame.K_DOWN]:
+            print("bas")
+        elif pressed[pygame.K_LEFT]:
+            print("gauche")
+        elif pressed[pygame.K_RIGHT]:
+            print("droite")
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
 
     def on_loop(self):
-        pass
+        self.group.update()
+        self.group.center(self.player.rect)
+        self.group.draw(self._display)
 
     def on_render(self):
-        pass
+        pygame.display.flip()
 
     def on_cleanup(self):
         pygame.quit()
