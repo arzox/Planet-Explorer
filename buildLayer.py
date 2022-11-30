@@ -7,6 +7,7 @@ class HoloTile(pygame.sprite.Sprite):
     def __init__(self, pos, surf):
         super().__init__()
         self.image = surf
+        self.image.set_alpha(128)
         self.rect = self.image.get_rect(topleft=pos)
 
 
@@ -44,10 +45,10 @@ class BuildLayer:
     def get_build(self, point):
         for rect in self.ground_rects:
             if rect.collidepoint(point):
-                x = rect.x // self.tile_size
-                y = rect.y // self.tile_size
+                x = round(rect.x / self.tile_size)
+                y = round(rect.y / self.tile_size)
 
-                if 'B' in self.grid[y][x]:
+                if 'B' in self.grid[y][x] and not 'X' in self.grid[y][x]:
                     self.grid[y][x].append('X')
                     self.create_build()
 
@@ -57,8 +58,5 @@ class BuildLayer:
             for index_col, cell in enumerate(row):
                 if 'X' in cell:
                     print(self.all_sprites)
-                    sprite = HoloTile(pos=(index_col * self.tile_size, index_row * self.tile_size),
-                             surf=pygame.image.load(Build.HOLO.value),
-                             #groups=[self.all_sprites, self.plan_sprites]
-                             )
+                    sprite = HoloTile(pos=(index_col * self.tile_size, index_row * self.tile_size), surf=pygame.image.load(Build.HOLO.value),)
                     self.all_sprites.add(sprite)
