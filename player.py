@@ -33,15 +33,16 @@ class Player(pygame.sprite.Sprite):
 
     def build(self):
         dir = list(self.images.keys())[list(self.images.values()).index(self.image)]
+        print(self.position[0])
         match dir:
             case "right":
-                self.build_layer.get_build([self.position[0] + 26, self.position[1] + self.image.get_size()[1]])
+                self.build_layer.get_build([self.position[0] + self.image.get_size()[1], self.position[1] + self.image.get_size()[1]/2 - 8])
             case "down":
-                self.build_layer.get_build([self.position[0] + 8, self.position[1] + 64 - self.image.get_size()[1]])
+                self.build_layer.get_build([self.position[0], self.position[1] + self.image.get_size()[1] + 16])
             case "left":
-                self.build_layer.get_build([self.position[0] + 8, self.position[1] + self.image.get_size()[1]])
+                self.build_layer.get_build([self.position[0] - self.image.get_size()[1], self.position[1] + self.image.get_size()[1]/2 - 8])
             case "up":
-                self.build_layer.get_build([self.position[0] + 18, self.position[1] + 16 - self.image.get_size()[1]])
+                self.build_layer.get_build([self.position[0], self.position[1] - self.image.get_size()[1]])
 
     def save_location(self):
         self.old_position = self.position.copy()
