@@ -1,15 +1,19 @@
 import pygame
+import pytmx
 from pytmx.util_pygame import load_pygame
 import pyscroll
+from buildLayer import BuildLayer
 from player import Player
-import scipy
 
 
 class Game:
     def __init__(self):
+        self.group = None
         self._running = True
         self.screen = None
         self.size = self.weight, self.height = 1080, 720
+
+        self.build_layer = None
 
     def on_init(self):
         pygame.init()
@@ -23,9 +27,12 @@ class Game:
         map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.size)
         map_layer.zoom = 4
 
+        self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=3)
+        self.build_layer = BuildLayer(tmx_data, self.group)
+
         # generer un joueur
         player_spawn = tmx_data.get_object_by_name("PlayerSpawn")
-        self.player = Player(player_spawn.x, player_spawn.y)
+        self.player = Player([player_spawn.x, player_spawn.y], build_layer=self.build_layer)
 
         # definir liste de rectangle de collision
         self.walls = []
@@ -35,11 +42,11 @@ class Game:
                 self.walls.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
 
         # dessiner groupe de calque
-        self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=3)
         self.group.add(self.player)
 
     def handle_input(self):
         pressed = pygame.key.get_pressed()
+        clicked = pygame.mouse.get_pressed()
         if pressed[pygame.K_UP]:
             self.player.move_up()
             self.player.change_animation('up')
@@ -52,6 +59,9 @@ class Game:
         if pressed[pygame.K_RIGHT]:
             self.player.move_right()
             self.player.change_animation('right')
+
+        if clicked == (1, 0, 0):
+            self.player.build()
 
     def on_event(self, event):
         if event.type == pygame.QUIT:

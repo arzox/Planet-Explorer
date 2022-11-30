@@ -11,8 +11,8 @@
 * Tile Map
  
 ### Features:
-* [Craft](https://github.com/arzox/Trophy/blob/main/Idea/Craft.md)
-* [Construction Base](https://github.com/arzox/Trophy/blob/main/Idea/Build.md)
+* [Craft](https://github.com/arzox/Trophy/blob/main/idea/Craft.md)
+* [Construction Base](https://github.com/arzox/Trophy/blob/main/idea/Build.md)
 * Inventaire
 * Lumière
 * Jour/Nuit
@@ -22,4 +22,4 @@
 * Agriculture
 * Barre de Faim/Oxygène
 * Système de durabilité des outils
-* [Harvesting](https://github.com/arzox/Trophy/blob/main/Idea/Harvesting.md)
+* [Harvesting](https://github.com/arzox/Trophy/blob/main/idea/Harvesting.md)
