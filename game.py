@@ -1,12 +1,13 @@
 import pygame
 from pytmx.util_pygame import load_pygame
 import pyscroll
+from inventory import Inventory
 from player import Player
-import scipy
 
 
 class Game:
     def __init__(self):
+        self.inventory = Inventory()
         self._running = True
         self.screen = None
         self.size = self.weight, self.height = 1080, 720
@@ -40,16 +41,16 @@ class Game:
 
     def handle_input(self):
         pressed = pygame.key.get_pressed()
-        if pressed[pygame.K_UP]:
+        if pressed[pygame.K_UP] or pressed[pygame.K_z]:
             self.player.move_up()
             self.player.change_animation('up')
-        if pressed[pygame.K_DOWN]:
+        if pressed[pygame.K_DOWN] or pressed[pygame.K_s]:
             self.player.move_down()
             self.player.change_animation('down')
-        if pressed[pygame.K_LEFT]:
+        if pressed[pygame.K_LEFT] or pressed[pygame.K_q]:
             self.player.move_left()
             self.player.change_animation('left')
-        if pressed[pygame.K_RIGHT]:
+        if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
             self.player.move_right()
             self.player.change_animation('right')
 
@@ -64,6 +65,7 @@ class Game:
         if self.player.feet.collidelist(self.walls) > -1: self.player.move_back()
         self.group.center(self.player.rect)
         self.group.draw(self.screen)
+        self.inventory.display(self.screen)
 
     def on_render(self):
         pygame.display.flip()
