@@ -48,11 +48,10 @@ class Inventory:
 
     def try_to_add_item_in_slot(self, item):
         id_slot = 1
-        slot = Slot(id_slot)
         while True:
+            slot = Slot(id_slot)
             if slot.is_empty is True:
                 slot.add_item(item)
-                id_slot = 1
                 break
             else:
                 id_slot += 1
