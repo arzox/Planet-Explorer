@@ -1,6 +1,6 @@
 import pygame
-import pytmx
 import pyscroll
+from pytmx import load_pygame
 from buildLayer import BuildLayer
 from inventory import Inventory
 from player import Player
@@ -48,7 +48,6 @@ class Game:
     def handle_input(self):
         pressed = pygame.key.get_pressed()
         clicked = pygame.mouse.get_pressed()
-        if pressed[pygame.K_UP]:
         if pressed[pygame.K_UP] or pressed[pygame.K_z]:
             self.player.move_up()
             self.player.change_animation('up')

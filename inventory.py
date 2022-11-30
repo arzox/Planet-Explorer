@@ -13,6 +13,9 @@ class Slot(pygame.sprite.Sprite):
         self.image = pygame.image.load('assets/inventory/default.jpg')
         self.rect = self.image.get_rect()
 
+    def set_position(self, position: (int, int)):
+        self.rect.x, self.rect.y = position
+
     def add_item(self, item):
         if self.is_empty is True:
             self.item_in_slot = item
@@ -21,8 +24,15 @@ class Slot(pygame.sprite.Sprite):
         elif self.is_empty is False and item.type == self.item_in_slot:
             self.counter += 1
 
-    def set_position(self, position: (int, int)):
-        self.rect.x, self.rect.y = position
+    def remove_item(self):
+        item_removed = self.item_in_slot
+        if self.counter > 1:
+            self.counter -= 1
+        else:
+            self.item_in_slot = None
+            self.is_empty = True
+            self.counter = None
+        return item_removed
 
 
 class Inventory:
