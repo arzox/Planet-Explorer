@@ -34,6 +34,12 @@ class Slot(pygame.sprite.Sprite):
             self.counter = None
         return item_removed
 
+    def select_slot(self):
+        self.image = pygame.image.load('assets/inventory/tile_selected.jpg')
+
+    def deselect_slot(self):
+        self.image = pygame.image.load('assets/inventory/default.jpg')
+
 
 class Inventory:
 
@@ -51,6 +57,9 @@ class Inventory:
             slot.set_position((slots_x, slots_y))
             id_slot += 1
             slots_x += 100
+            print(slot.id_slot)
+
+        self.slots[0].select_slot()
 
     def display(self, screen):
         for slot in self.slots:
@@ -58,10 +67,17 @@ class Inventory:
 
     def try_to_add_item_in_slot(self, item):
         id_slot = 1
-        while True:
+        while True or id_slot <= 9:
             slot = Slot(id_slot)
             if slot.is_empty is True:
                 slot.add_item(item)
                 break
             else:
                 id_slot += 1
+
+    def select_slot(self, id_slot):
+        for slot in self.slots:
+            if slot.id_slot == id_slot:
+                slot.select_slot()
+            else:
+                slot.deselect_slot()
