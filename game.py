@@ -1,10 +1,7 @@
 import pygame
+from pytmx.util_pygame import load_pygame
 import pyscroll
-from pytmx import load_pygame
-
-import inventory
-from buildLayer import BuildLayer
-from inventory import Inventory
+import build
 from player import Player
 
 
@@ -17,7 +14,7 @@ class Game:
         self.size = self.weight, self.height = 1080, 720
 
         self.build_layer = None
-        self.key_pressed = False
+        self.on_preview = False
 
     def on_init(self):
         pygame.init()
@@ -32,7 +29,7 @@ class Game:
         map_layer.zoom = 4
 
         self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=3)
-        self.build_layer = BuildLayer(tmx_data, self.group)
+        self.build_layer = build.Build(tmx_data, self.group)
 
         # generer un joueur
         player_spawn = tmx_data.get_object_by_name("PlayerSpawn")
@@ -63,7 +60,7 @@ class Game:
         if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
             self.player.move_right()
             self.player.change_animation('right')
-
+            
         # Inventaire
         if pressed[pygame.K_1]:
             if not self.inventory.slots[0].is_selected:
@@ -93,15 +90,19 @@ class Game:
             if not self.inventory.slots[8].is_selected:
                 self.inventory.select_slot(9)
 
-        if clicked == (1, 0, 0):
-            self.key_pressed = True
-        elif self.key_pressed:
-            self.key_pressed = False
-            self.player.build()
-
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_f:
+                self.build_layer.set_build_preview()
+                self.on_preview = True
+            if event.key == pygame.K_x:
+                self.build_layer.remove_build_preview()
+                self.on_preview = False
+        if event.type == pygame.MOUSEBUTTONUP:
+            if event.button == pygame.BUTTON_LEFT and self.on_preview:
+                self.build_layer.set_build()
 
     def on_loop(self):
         self.player.save_location()

@@ -1,8 +1,9 @@
 import pygame
+import build
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, build_layer):
+    def __init__(self, pos, build_layer: build.Build):
         super().__init__()
         self.sprite_sheet = pygame.image.load('assets/player/playerSpriteSheet.png')
         self.position = pos
@@ -26,23 +27,13 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = self.position
         self.feet.midbottom = self.rect.midbottom
 
+        direction = list(self.images.keys())[list(self.images.values()).index(self.image)]
+        self.build_layer.set_build_position(direction, self.position)
+
     def move_back(self):
         self.position = self.old_position
         self.rect.topleft = self.position
         self.feet.midbottom = self.rect.midbottom
-
-    def build(self):
-        dir = list(self.images.keys())[list(self.images.values()).index(self.image)]
-        print(self.position[0])
-        match dir:
-            case "right":
-                self.build_layer.get_build([self.position[0] + self.image.get_size()[1], self.position[1] + self.image.get_size()[1]/2 - 8])
-            case "down":
-                self.build_layer.get_build([self.position[0], self.position[1] + self.image.get_size()[1] + 16])
-            case "left":
-                self.build_layer.get_build([self.position[0] - self.image.get_size()[1], self.position[1] + self.image.get_size()[1]/2 - 8])
-            case "up":
-                self.build_layer.get_build([self.position[0], self.position[1] - self.image.get_size()[1]])
 
     def save_location(self):
         self.old_position = self.position.copy()
