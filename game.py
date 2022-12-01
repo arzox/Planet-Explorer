@@ -13,9 +13,7 @@ class Game:
         self.size = self.weight, self.height = 1080, 720
 
         self.build_layer = None
-        self.key_pressed = False
-        self.build_set = False
-        self.build_remove = False
+        self.on_preview = False
 
     def on_init(self):
         pygame.init()
@@ -62,27 +60,19 @@ class Game:
             self.player.move_right()
             self.player.change_animation('right')
 
-        if pressed[pygame.K_f]:
-            self.build_set = True
-        elif self.build_set:
-            self.build_set = False
-            self.build_layer.set_build_preview()
-
-        if pressed[pygame.K_x]:
-            self.build_remove = True
-        elif self.build_remove:
-            self.build_remove = False
-            self.build_layer.remove_build_preview()
-
-        if clicked == (1, 0, 0):
-            self.key_pressed = True
-        elif self.key_pressed:
-            self.key_pressed = False
-            self.build_layer.set_build()
-
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_f:
+                self.build_layer.set_build_preview()
+                self.on_preview = True
+            if event.key == pygame.K_x:
+                self.build_layer.remove_build_preview()
+                self.on_preview = False
+        if event.type == pygame.MOUSEBUTTONUP:
+            if event.button == pygame.BUTTON_LEFT and self.on_preview:
+                self.build_layer.set_build()
 
     def on_loop(self):
         self.player.save_location()
