@@ -10,6 +10,7 @@ class Slot(pygame.sprite.Sprite):
         self.counter = None
         self.item_in_slot = None
         self.is_empty = True
+        self.is_selected = False
         self.image = pygame.image.load('assets/inventory/default.jpg')
         self.rect = self.image.get_rect()
 
@@ -57,9 +58,10 @@ class Inventory:
             slot.set_position((slots_x, slots_y))
             id_slot += 1
             slots_x += 100
-            print(slot.id_slot)
 
+        # Sélectionne le premier slot de l'inventaire au début du jeu
         self.slots[0].select_slot()
+        self.slots[0].is_selected = True
 
     def display(self, screen):
         for slot in self.slots:
@@ -79,5 +81,7 @@ class Inventory:
         for slot in self.slots:
             if slot.id_slot == id_slot:
                 slot.select_slot()
+                slot.is_selected = True
             else:
                 slot.deselect_slot()
+                slot.is_selected = False

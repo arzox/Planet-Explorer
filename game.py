@@ -64,25 +64,34 @@ class Game:
             self.player.move_right()
             self.player.change_animation('right')
 
-        # Pas opti
+        # Inventaire
         if pressed[pygame.K_1]:
-            self.inventory.select_slot(1)
+            if not self.inventory.slots[0].is_selected:
+                self.inventory.select_slot(1)
         if pressed[pygame.K_2]:
-            self.inventory.select_slot(2)
+            if not self.inventory.slots[1].is_selected:
+                self.inventory.select_slot(2)
         if pressed[pygame.K_3]:
-            self.inventory.select_slot(3)
+            if not self.inventory.slots[2].is_selected:
+                self.inventory.select_slot(3)
         if pressed[pygame.K_4]:
-            self.inventory.select_slot(4)
+            if not self.inventory.slots[3].is_selected:
+                self.inventory.select_slot(4)
         if pressed[pygame.K_5]:
-            self.inventory.select_slot(5)
+            if not self.inventory.slots[4].is_selected:
+                self.inventory.select_slot(5)
         if pressed[pygame.K_6]:
-            self.inventory.select_slot(6)
+            if not self.inventory.slots[5].is_selected:
+                self.inventory.select_slot(6)
         if pressed[pygame.K_7]:
-            self.inventory.select_slot(7)
+            if not self.inventory.slots[6].is_selected:
+                self.inventory.select_slot(7)
         if pressed[pygame.K_8]:
-            self.inventory.select_slot(8)
+            if not self.inventory.slots[7].is_selected:
+                self.inventory.select_slot(8)
         if pressed[pygame.K_9]:
-            self.inventory.select_slot(9)
+            if not self.inventory.slots[8].is_selected:
+                self.inventory.select_slot(9)
 
         if clicked == (1, 0, 0):
             self.key_pressed = True
