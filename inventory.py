@@ -36,9 +36,11 @@ class Slot(pygame.sprite.Sprite):
         return item_removed
 
     def select_slot(self):
+        self.is_selected = True
         self.image = pygame.image.load('assets/inventory/tile_selected.jpg')
 
     def deselect_slot(self):
+        self.is_selected = False
         self.image = pygame.image.load('assets/inventory/default.jpg')
 
 
@@ -81,7 +83,5 @@ class Inventory:
         for slot in self.slots:
             if slot.id_slot == id_slot:
                 slot.select_slot()
-                slot.is_selected = True
             else:
                 slot.deselect_slot()
-                slot.is_selected = False
