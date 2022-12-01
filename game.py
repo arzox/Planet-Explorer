@@ -1,8 +1,7 @@
 import pygame
-import pytmx
 from pytmx.util_pygame import load_pygame
 import pyscroll
-from buildLayer import BuildLayer
+import build
 from player import Player
 
 
@@ -15,6 +14,8 @@ class Game:
 
         self.build_layer = None
         self.key_pressed = False
+        self.build_set = False
+        self.build_remove = False
 
     def on_init(self):
         pygame.init()
@@ -29,7 +30,7 @@ class Game:
         map_layer.zoom = 4
 
         self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=3)
-        self.build_layer = BuildLayer(tmx_data, self.group)
+        self.build_layer = build.Build(tmx_data, self.group)
 
         # generer un joueur
         player_spawn = tmx_data.get_object_by_name("PlayerSpawn")
@@ -61,11 +62,23 @@ class Game:
             self.player.move_right()
             self.player.change_animation('right')
 
+        if pressed[pygame.K_f]:
+            self.build_set = True
+        elif self.build_set:
+            self.build_set = False
+            self.build_layer.set_build_preview()
+
+        if pressed[pygame.K_x]:
+            self.build_remove = True
+        elif self.build_remove:
+            self.build_remove = False
+            self.build_layer.remove_build_preview()
+
         if clicked == (1, 0, 0):
             self.key_pressed = True
         elif self.key_pressed:
             self.key_pressed = False
-            self.player.build()
+            self.build_layer.set_build()
 
     def on_event(self, event):
         if event.type == pygame.QUIT:

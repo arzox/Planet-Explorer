@@ -1,8 +1,7 @@
 from enum import Enum
-import pygame.image
 
 
-class Build(Enum):
+class Building(Enum):
     WORKBENCH = 0
     OXYGEN_SUPPLIER = 1
     FORGE = 2
