@@ -12,15 +12,10 @@ class HoloTile(pygame.sprite.Sprite):
 
 
 class BuildLayer:
-    def __init__(self, tmx_data: pytmx.TiledMap, all_sprites):
+    def __init__(self, tmx_data: pytmx.TiledMap, all_sprite):
         self.tmx_data = tmx_data
-        self.all_sprites = all_sprites
+        self.all_sprite = all_sprite
         self.tile_size = self.tmx_data.tileheight
-        # sprite groups
-        self.plan_sprites = pygame.sprite.Group()
-
-        # graphics
-        # self.plan_surf = pygame.image.load(plan.value)
 
         self.create_ground_grid()
         self.create_ground_rects()
@@ -50,13 +45,5 @@ class BuildLayer:
 
                 if 'B' in self.grid[y][x] and not 'X' in self.grid[y][x]:
                     self.grid[y][x].append('X')
-                    self.create_build()
-
-    def create_build(self):
-        self.plan_sprites.empty()
-        for index_row, row in enumerate(self.grid):
-            for index_col, cell in enumerate(row):
-                if 'X' in cell:
-                    print(self.all_sprites)
-                    sprite = HoloTile(pos=(index_col * self.tile_size, index_row * self.tile_size), surf=pygame.image.load(Build.HOLO.value),)
-                    self.all_sprites.add(sprite)
+                    sprite = HoloTile(pos=(x * self.tile_size, y * self.tile_size), surf=pygame.image.load(Build.HOLO.value))
+                    self.all_sprite.add(sprite)

@@ -17,6 +17,7 @@ class Game:
         self.size = self.weight, self.height = 1080, 720
 
         self.build_layer = None
+        self.key_pressed = False
 
     def on_init(self):
         pygame.init()
@@ -84,6 +85,9 @@ class Game:
             self.inventory.select_slot(9)
 
         if clicked == (1, 0, 0):
+            self.key_pressed = True
+        elif self.key_pressed:
+            self.key_pressed = False
             self.player.build()
 
     def on_event(self, event):
