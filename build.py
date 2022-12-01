@@ -65,20 +65,6 @@ class Build:
         for x, y, _ in self.tmx_data.get_layer_by_name("ground").tiles():
             self.grid[y][x].append('B')
 
-    # creer une position pour les tiles en fonction de ou regarde le joueur
-    def set_build_position(self, direction: str, position: list):
-        match direction:
-            case "right":
-                self.build_position = [round((position[0] + self.tile_size * 3) / self.tile_size) * self.tile_size,
-                                       round((position[1] + self.tile_size - 8) / self.tile_size) * self.tile_size]
-            case "down":
-                self.build_position = [round((position[0]) / self.tile_size) * self.tile_size, round((position[1] + self.tile_size * 3) / self.tile_size) * self.tile_size]
-            case "left":
-                self.build_position = [round((position[0] - self.tile_size * 2) / self.tile_size) * self.tile_size,
-                                       round((position[1] + self.tile_size - 8) / self.tile_size) * self.tile_size]
-            case "up":
-                self.build_position = [round(position[0] / self.tile_size) * self.tile_size, round((position[1] - self.tile_size * 2) / self.tile_size) * self.tile_size]
-
     # convertie la table avec des lettres en table avec des rect
     def create_ground_rects(self):
         self.ground_rects = []
@@ -124,3 +110,19 @@ class Build:
     def remove_build_preview(self):
         self.all_sprite.remove(self.build_preview_tile)
         self.build_preview_tile.is_preview = False
+
+    # creer une position pour les tiles en fonction de ou regarde le joueur
+    def set_build_position(self, direction: str, position: list):
+        match direction:
+            case "right":
+                self.build_position = [round((position[0] + self.tile_size * 3) / self.tile_size) * self.tile_size,
+                                       round((position[1] + self.tile_size - 8) / self.tile_size) * self.tile_size]
+            case "down":
+                self.build_position = [round((position[0]) / self.tile_size) * self.tile_size,
+                                       round((position[1] + self.tile_size * 3) / self.tile_size) * self.tile_size]
+            case "left":
+                self.build_position = [round((position[0] - self.tile_size * 2) / self.tile_size) * self.tile_size,
+                                       round((position[1] + self.tile_size - 8) / self.tile_size) * self.tile_size]
+            case "up":
+                self.build_position = [round(position[0] / self.tile_size) * self.tile_size,
+                                       round((position[1] - self.tile_size * 2) / self.tile_size) * self.tile_size]
