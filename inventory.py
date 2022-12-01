@@ -63,7 +63,6 @@ class Inventory:
 
         # Sélectionne le premier slot de l'inventaire au début du jeu
         self.slots[0].select_slot()
-        self.slots[0].is_selected = True
 
     def display(self, screen):
         for slot in self.slots:
