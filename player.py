@@ -5,7 +5,7 @@ import build
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, build_layer: build.Build):
         super().__init__()
-        self.sprite_sheet = pygame.image.load('assets/player/playerSpriteSheet.png')
+        self.sprite_sheet = pygame.image.load('assets/player/playerSpriteSheet.png').convert_alpha()
         self.position = pos
         self.images = {
             'down': self.getImage(0, 0),
@@ -17,7 +17,7 @@ class Player(pygame.sprite.Sprite):
         self.image.set_colorkey([0, 0, 0])
         self.rect = self.image.get_rect()
         self.speed = 3
-        self.feet = pygame.Rect(0, 0, self.rect.width / 2, 12)
+        self.feet = pygame.Rect(0, 0, self.rect.width / 3, 12)
         self.old_position = self.position.copy()
 
         # interactions

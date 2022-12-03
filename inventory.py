@@ -11,7 +11,7 @@ class Slot(pygame.sprite.Sprite):
         self.item_in_slot = None
         self.is_empty = True
         self.is_selected = False
-        self.image = pygame.image.load('assets/inventory/default.jpg')
+        self.image = pygame.image.load('assets/inventory/default.jpg').convert()
         self.rect = self.image.get_rect()
 
     def set_position(self, position: (int, int)):
@@ -37,11 +37,11 @@ class Slot(pygame.sprite.Sprite):
 
     def select_slot(self):
         self.is_selected = True
-        self.image = pygame.image.load('assets/inventory/tile_selected.jpg')
+        self.image = pygame.image.load('assets/inventory/tile_selected.jpg').convert()
 
     def deselect_slot(self):
         self.is_selected = False
-        self.image = pygame.image.load('assets/inventory/default.jpg')
+        self.image = pygame.image.load('assets/inventory/default.jpg').convert()
 
 
 class Inventory:

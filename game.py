@@ -2,18 +2,18 @@ import pygame
 from pytmx.util_pygame import load_pygame
 import pyscroll
 import build
+from inventory import Inventory
+from mapores import MapOres
 from player import Player
 
 
 class Game:
     def __init__(self):
         self.group = None
-        self.inventory = Inventory()
         self._running = True
         self.screen = None
         self.size = self.weight, self.height = 1080, 720
 
-        self.build_layer = None
         self.on_preview = False
 
     def on_init(self):
@@ -27,12 +27,14 @@ class Game:
         map_data = pyscroll.data.TiledMapData(tmx_data)
         map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.size)
         map_layer.zoom = 4
-
-        self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=3)
-        self.build_layer = build.Build(tmx_data, self.group)
-
-        # generer un joueur
         player_spawn = tmx_data.get_object_by_name("PlayerSpawn")
+
+        self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=2)
+
+        # Instances
+        self.inventory = Inventory()
+        self.build_layer = build.Build(tmx_data, self.group)
+        self.map_ores = MapOres(tmx_data, self.group)
         self.player = Player([player_spawn.x, player_spawn.y], build_layer=self.build_layer)
 
         # definir liste de rectangle de collision
@@ -43,7 +45,7 @@ class Game:
                 self.walls.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
 
         # dessiner groupe de calque
-        self.group.add(self.player)
+        self.group.add(self.player, layer=10)
 
     def handle_input(self):
         pressed = pygame.key.get_pressed()
@@ -60,7 +62,7 @@ class Game:
         if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
             self.player.move_right()
             self.player.change_animation('right')
-            
+
         # Inventaire
         if pressed[pygame.K_1]:
             if not self.inventory.slots[0].is_selected:
@@ -108,7 +110,10 @@ class Game:
         self.player.save_location()
         self.handle_input()
         self.group.update()
-        if self.player.feet.collidelist(self.walls) > -1: self.player.move_back()
+
+        if self.player.feet.collidelist(self.walls) > -1 or self.player.feet.collidelist(self.map_ores.ores_rect) > -1 or self.player.feet.collidelist(self.build_layer.build_rects) > -1:
+            self.player.move_back()
+
         self.group.center(self.player.rect)
         self.group.draw(self.screen)
         self.inventory.display(self.screen)

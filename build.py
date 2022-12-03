@@ -19,7 +19,7 @@ class BuildPreviewTile(pygame.sprite.Sprite):
         # creation sprite
         self.image = surf
         self.image.set_alpha(128)
-        self.rect = self.image.get_rect(topleft=[0,0])
+        self.rect = self.image.get_rect(topleft=[0, 0])
 
         # variables temporaires
         self.build_instance = instance
@@ -38,9 +38,9 @@ class BuildPreviewTile(pygame.sprite.Sprite):
 
     def set_color(self):
         if self.is_buildable:
-            self.image.fill((10,255,235))
+            self.image.fill((10, 255, 235))
         else:
-            self.image.fill((255,0,0))
+            self.image.fill((255, 0, 0))
 
 
 # class qui gere la construction
@@ -51,12 +51,13 @@ class Build:
         self.all_sprite = all_sprite
         self.tile_size = self.tmx_data.tileheight
 
-        self.create_ground_grid()
-        self.create_ground_rects()
+        self.build_rects = []
 
         # creer la tile de previsualisation
         self.build_position = [0, 0]
-        self.build_preview_tile = BuildPreviewTile(pygame.image.load(Building.HOLO.value), self)
+        self.build_preview_tile = BuildPreviewTile(pygame.image.load(Building.HOLO.value).convert(), self)
+
+        self.create_ground_grid()
 
     # creer une table de la carte avec les tiles de sol
     def create_ground_grid(self):
@@ -65,45 +66,35 @@ class Build:
         for x, y, _ in self.tmx_data.get_layer_by_name("ground").tiles():
             self.grid[y][x].append('B')
 
-    # convertie la table avec des lettres en table avec des rect
-    def create_ground_rects(self):
-        self.ground_rects = []
-        for index_row, row in enumerate(self.grid):
-            for index_col, cell in enumerate(row):
-                if 'B' in cell:
-                    x = index_col * self.tile_size
-                    y = index_row * self.tile_size
-                    rect = pygame.Rect(x, y, self.tile_size, self.tile_size)
-                    self.ground_rects.append(rect)
-
     # verifie si le build est possible
     def check_buildable(self):
-        for rect in self.ground_rects:
-            if rect.collidepoint(self.build_position):
-                x = self.build_position[0] // self.tile_size
-                y = self.build_position[1] // self.tile_size
+        x = self.build_position[0] // self.tile_size
+        y = self.build_position[1] // self.tile_size
 
+        if 0 <= y < len(self.grid):
+            if 0 <= x < len(self.grid[y]):
                 if 'B' in self.grid[y][x] and not 'X' in self.grid[y][x]:
                     return True
         return False
 
     # fait apparaitre un batiment au coordonnees
     def set_build(self):
-        for rect in self.ground_rects:
-            if rect.collidepoint(self.build_position):
-                x = self.build_position[0] // self.tile_size
-                y = self.build_position[1] // self.tile_size
+        x = self.build_position[0] // self.tile_size
+        y = self.build_position[1] // self.tile_size
 
+        if 0 <= y < len(self.grid):
+            if 0 <= x < len(self.grid[y]):
                 if 'B' in self.grid[y][x] and not 'X' in self.grid[y][x]:
                     # fait apparaitre le sprite et empeche la creation d'un batiment au même endroit
                     self.grid[y][x].append('X')
                     sprite = BuildTile(pos=(x * self.tile_size, y * self.tile_size),
-                                       surf=pygame.image.load(Building.HOLO.value))
-                    self.all_sprite.add(sprite)
+                                       surf=pygame.image.load(Building.HOLO.value).convert())
+                    self.build_rects.append(sprite.rect)
+                    self.all_sprite.add(sprite, layer=5)
 
     # fait apparaitre la previsualisation
     def set_build_preview(self):
-        self.all_sprite.add(self.build_preview_tile)
+        self.all_sprite.add(self.build_preview_tile, layer=9)
         self.build_preview_tile.is_preview = True
 
     # fait disparaitre la previsualisation
