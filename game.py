@@ -62,6 +62,8 @@ class Game:
         if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
             self.player.move_right()
             self.player.change_animation('right')
+        if pressed[pygame.K_r]:
+            self.harvesting.digging()
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
