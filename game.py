@@ -50,7 +50,6 @@ class Game:
 
     def handle_input(self):
         pressed = pygame.key.get_pressed()
-        clicked = pygame.mouse.get_pressed()
         if pressed[pygame.K_UP] or pressed[pygame.K_z]:
             self.player.move_up()
             self.player.change_animation('up')
@@ -64,35 +63,6 @@ class Game:
             self.player.move_right()
             self.player.change_animation('right')
 
-        # Inventaire
-        if pressed[pygame.K_1]:
-            if not self.inventory.slots[0].is_selected:
-                self.inventory.select_slot(1)
-        if pressed[pygame.K_2]:
-            if not self.inventory.slots[1].is_selected:
-                self.inventory.select_slot(2)
-        if pressed[pygame.K_3]:
-            if not self.inventory.slots[2].is_selected:
-                self.inventory.select_slot(3)
-        if pressed[pygame.K_4]:
-            if not self.inventory.slots[3].is_selected:
-                self.inventory.select_slot(4)
-        if pressed[pygame.K_5]:
-            if not self.inventory.slots[4].is_selected:
-                self.inventory.select_slot(5)
-        if pressed[pygame.K_6]:
-            if not self.inventory.slots[5].is_selected:
-                self.inventory.select_slot(6)
-        if pressed[pygame.K_7]:
-            if not self.inventory.slots[6].is_selected:
-                self.inventory.select_slot(7)
-        if pressed[pygame.K_8]:
-            if not self.inventory.slots[7].is_selected:
-                self.inventory.select_slot(8)
-        if pressed[pygame.K_9]:
-            if not self.inventory.slots[8].is_selected:
-                self.inventory.select_slot(9)
-
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
@@ -103,6 +73,27 @@ class Game:
             if event.key == pygame.K_x:
                 self.map_layers.remove_build_preview()
                 self.on_preview = False
+
+            # Inventaire
+            if event.key == pygame.K_1:
+                self.inventory.select_slot(1)
+            if event.key == pygame.K_2:
+                self.inventory.select_slot(2)
+            if event.key == pygame.K_3:
+                self.inventory.select_slot(3)
+            if event.key == pygame.K_4:
+                self.inventory.select_slot(4)
+            if event.key == pygame.K_5:
+                self.inventory.select_slot(5)
+            if event.key == pygame.K_6:
+                self.inventory.select_slot(6)
+            if event.key == pygame.K_7:
+                self.inventory.select_slot(7)
+            if event.key == pygame.K_8:
+                self.inventory.select_slot(8)
+            if event.key == pygame.K_9:
+                self.inventory.select_slot(9)
+
         if event.type == pygame.MOUSEBUTTONUP:
             if event.button == pygame.BUTTON_LEFT and self.on_preview:
                 self.map_layers.set_build()
@@ -112,7 +103,8 @@ class Game:
         self.handle_input()
         self.group.update()
 
-        if self.player.feet.collidelist(self.walls) > -1 or self.player.feet.collidelist(self.map_layers.ores_rect) > -1 or self.player.feet.collidelist(self.map_layers.build_rects) > -1:
+        if self.player.feet.collidelist(self.walls) > -1 or self.player.feet.collidelist(
+                self.map_layers.ores_rect) > -1 or self.player.feet.collidelist(self.map_layers.build_rects) > -1:
             self.player.move_back()
 
         self.group.center(self.player.rect)

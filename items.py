@@ -2,4 +2,11 @@ from enum import Enum
 
 
 class Items(Enum):
-    PICKAXE = "assets/image/items/Pickaxe.png"
+    PICKAXE = {
+        'image': 'assets/image/items/Pickaxe.png',
+        'mining_speed': 4,
+        'durability': 17,
+        'power': 1,
+        'name': 'pickaxe',
+        'capacity': 1
+    }
