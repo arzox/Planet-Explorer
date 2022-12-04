@@ -11,6 +11,14 @@ class BuildTile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=pos)
 
 
+class IronOre(pygame.sprite.Sprite):
+    def __init__(self, pos):
+        super().__init__()
+        self.image = pygame.image.load('assets/image/ore/iron.png').convert_alpha()
+        self.image.set_colorkey((0, 0, 0))
+        self.rect = self.image.get_rect(topleft=pos)
+
+
 # Sprite de la visualisation de construction
 class BuildPreviewTile(pygame.sprite.Sprite):
     def __init__(self, surf, instance):
@@ -44,7 +52,7 @@ class BuildPreviewTile(pygame.sprite.Sprite):
 
 
 # class qui gere la construction
-class Build:
+class MapLayers:
     def __init__(self, tmx_data: pytmx.TiledMap, all_sprite):
         # recupere valeur de la carte
         self.tmx_data = tmx_data
@@ -52,19 +60,23 @@ class Build:
         self.tile_size = self.tmx_data.tileheight
 
         self.build_rects = []
+        self.ores_rect = []
 
         # creer la tile de previsualisation
         self.build_position = [0, 0]
         self.build_preview_tile = BuildPreviewTile(pygame.image.load(Building.HOLO.value).convert(), self)
 
-        self.create_ground_grid()
+        self.create_map_layer_grid()
+        self.spawn_ore()
 
     # creer une table de la carte avec les tiles de sol
-    def create_ground_grid(self):
+    def create_map_layer_grid(self):
         map_height, map_width = self.tmx_data.height, self.tmx_data.width
         self.grid = [[[] for col in range(map_width)] for row in range(map_height)]
         for x, y, _ in self.tmx_data.get_layer_by_name("ground").tiles():
             self.grid[y][x].append('B')
+        for x, y, _ in self.tmx_data.get_layer_by_name("ores").tiles():
+            self.grid[y][x].append('O')
 
     # verifie si le build est possible
     def check_buildable(self):
@@ -73,7 +85,7 @@ class Build:
 
         if 0 <= y < len(self.grid):
             if 0 <= x < len(self.grid[y]):
-                if 'B' in self.grid[y][x] and not 'X' in self.grid[y][x]:
+                if 'B' in self.grid[y][x] and not ('X' in self.grid[y][x] or 'O' in self.grid[y][x]):
                     return True
         return False
 
@@ -81,16 +93,24 @@ class Build:
     def set_build(self):
         x = self.build_position[0] // self.tile_size
         y = self.build_position[1] // self.tile_size
+        if self.check_buildable():
+            # fait apparaitre le sprite et empeche la creation d'un batiment au même endroit
+            self.grid[y][x].append('X')
+            sprite = BuildTile(pos=(x * self.tile_size, y * self.tile_size),
+                               surf=pygame.image.load(Building.HOLO.value).convert())
+            self.build_rects.append(sprite.rect)
+            self.all_sprite.add(sprite, layer=5)
 
-        if 0 <= y < len(self.grid):
-            if 0 <= x < len(self.grid[y]):
-                if 'B' in self.grid[y][x] and not 'X' in self.grid[y][x]:
-                    # fait apparaitre le sprite et empeche la creation d'un batiment au même endroit
-                    self.grid[y][x].append('X')
-                    sprite = BuildTile(pos=(x * self.tile_size, y * self.tile_size),
-                                       surf=pygame.image.load(Building.HOLO.value).convert())
-                    self.build_rects.append(sprite.rect)
-                    self.all_sprite.add(sprite, layer=5)
+    def spawn_ore(self):
+        for index_col, col in enumerate(self.grid):
+            for index_row, row in enumerate(self.grid[index_col]):
+                x = index_row
+                y = index_col
+                if 'O' in self.grid[y][x]:
+                    # fait apparaitre le minerai
+                    ore = IronOre(pos=(x * self.tile_size, y * self.tile_size), )
+                    self.all_sprite.add(ore, layer=4)
+                    self.ores_rect.append(ore.rect)
 
     # fait apparaitre la previsualisation
     def set_build_preview(self):

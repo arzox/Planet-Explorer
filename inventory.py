@@ -1,4 +1,5 @@
 import pygame
+from items import Items
 
 
 class Slot(pygame.sprite.Sprite):
@@ -47,7 +48,14 @@ class Slot(pygame.sprite.Sprite):
 class Inventory:
 
     def __init__(self):
+        self.selected_slot = 0
 
+        self.create_slots()
+
+        # Sélectionne le premier slot de l'inventaire au début du jeu
+        self.slots[0].select_slot()
+
+    def create_slots(self):
         self.number = 9
         self.slots = []
 
@@ -60,9 +68,6 @@ class Inventory:
             slot.set_position((slots_x, slots_y))
             id_slot += 1
             slots_x += 100
-
-        # Sélectionne le premier slot de l'inventaire au début du jeu
-        self.slots[0].select_slot()
 
     def display(self, screen):
         for slot in self.slots:
@@ -78,9 +83,15 @@ class Inventory:
             else:
                 id_slot += 1
 
+    def get_item(self) -> Items:
+
+
+
     def select_slot(self, id_slot):
         for slot in self.slots:
             if slot.id_slot == id_slot:
                 slot.select_slot()
+                self.selected_slot = id_slot
             else:
                 slot.deselect_slot()
+                self.selected_slot = -1

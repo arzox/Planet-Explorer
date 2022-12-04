@@ -1,9 +1,10 @@
 import pygame
 from pytmx.util_pygame import load_pygame
 import pyscroll
-import build
+
+from harvesting import Harvesting
 from inventory import Inventory
-from mapores import MapOres
+from maplayers import MapLayers
 from player import Player
 
 
@@ -33,9 +34,9 @@ class Game:
 
         # Instances
         self.inventory = Inventory()
-        self.build_layer = build.Build(tmx_data, self.group)
-        self.map_ores = MapOres(tmx_data, self.group)
-        self.player = Player([player_spawn.x, player_spawn.y], build_layer=self.build_layer)
+        self.map_layers = MapLayers(tmx_data, self.group)
+        self.player = Player([player_spawn.x, player_spawn.y], build_layer=self.map_layers)
+        self.harvesting = Harvesting(self.map_layers, self.inventory, self.player)
 
         # definir liste de rectangle de collision
         self.walls = []
@@ -97,21 +98,21 @@ class Game:
             self._running = False
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_f:
-                self.build_layer.set_build_preview()
+                self.map_layers.set_build_preview()
                 self.on_preview = True
             if event.key == pygame.K_x:
-                self.build_layer.remove_build_preview()
+                self.map_layers.remove_build_preview()
                 self.on_preview = False
         if event.type == pygame.MOUSEBUTTONUP:
             if event.button == pygame.BUTTON_LEFT and self.on_preview:
-                self.build_layer.set_build()
+                self.map_layers.set_build()
 
     def on_loop(self):
         self.player.save_location()
         self.handle_input()
         self.group.update()
 
-        if self.player.feet.collidelist(self.walls) > -1 or self.player.feet.collidelist(self.map_ores.ores_rect) > -1 or self.player.feet.collidelist(self.build_layer.build_rects) > -1:
+        if self.player.feet.collidelist(self.walls) > -1 or self.player.feet.collidelist(self.map_layers.ores_rect) > -1 or self.player.feet.collidelist(self.map_layers.build_rects) > -1:
             self.player.move_back()
 
         self.group.center(self.player.rect)

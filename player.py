@@ -1,9 +1,9 @@
 import pygame
-import build
+import maplayers
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, build_layer: build.Build):
+    def __init__(self, pos, build_layer: maplayers.MapLayers):
         super().__init__()
         self.sprite_sheet = pygame.image.load('assets/player/playerSpriteSheet.png').convert_alpha()
         self.position = pos
