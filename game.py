@@ -9,7 +9,7 @@ from player import Player
 class Game:
     def __init__(self):
         self.group = None
-        self.inventory = Inventory()
+        self.inventory = inventory.Inventory()
         self._running = True
         self.screen = None
         self.size = self.weight, self.height = 1080, 720
