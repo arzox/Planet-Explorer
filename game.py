@@ -1,11 +1,13 @@
-import pygame
+import pygame, sys
 from pytmx.util_pygame import load_pygame
 import pyscroll
 
+import playerstat
 from harvesting import Harvesting
 from inventory import Inventory
 from maplayers import MapLayers
 from player import Player
+from playerstat import Playerstat
 
 
 class Game:
@@ -14,7 +16,8 @@ class Game:
         self._running = True
         self.screen = None
         self.size = self.weight, self.height = 1080, 720
-
+        self.last = pygame.time.get_ticks()
+        self.cooldown = 3000
         self.on_preview = False
 
     def on_init(self):
@@ -36,6 +39,7 @@ class Game:
         self.inventory = Inventory()
         self.map_layers = MapLayers(tmx_data, self.group)
         self.player = Player([player_spawn.x, player_spawn.y], build_layer=self.map_layers)
+        self.playerstat = Playerstat(self)
         self.harvesting = Harvesting(self.map_layers, self.inventory, self.player)
 
         # definir liste de rectangle de collision
@@ -100,6 +104,16 @@ class Game:
             if event.button == pygame.BUTTON_LEFT and self.on_preview:
                 self.map_layers.set_build()
 
+        #tests barres
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_m:
+                self.playerstat.get_health()
+            if event.key == pygame.K_l:
+                self.playerstat.get_damage()
+
+            if event.key == pygame.K_p:
+                self.playerstat.regen_oxy()
+
     def on_loop(self):
         self.player.save_location()
         self.handle_input()
@@ -112,12 +126,20 @@ class Game:
         self.group.center(self.player.rect)
         self.group.draw(self.screen)
         self.inventory.display(self.screen)
+        self.playerstat.update(self.screen)
 
     def on_render(self):
         pygame.display.flip()
 
     def on_cleanup(self):
         pygame.quit()
+        sys.exit()
+
+    def wait(self):
+        now = pygame.time.get_ticks()
+        if now - self.last >= self.cooldown:
+            self.last = now
+            self.playerstat.loose_oxy()
 
     def on_execute(self):
         self.on_init()
@@ -126,6 +148,7 @@ class Game:
                 self.on_event(event)
             self.on_loop()
             self.on_render()
-
+            self.wait()
             pygame.time.Clock().tick(60)
         self.on_cleanup()
+
