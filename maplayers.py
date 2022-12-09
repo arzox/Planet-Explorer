@@ -16,7 +16,11 @@ class IronOre(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load('assets/image/ore/iron.png').convert_alpha()
         self.image.set_colorkey((0, 0, 0))
+        self.position = pos
         self.rect = self.image.get_rect(topleft=pos)
+
+    def update(self):
+        self.rect.topleft = self.position
 
 
 # Sprite de la visualisation de construction

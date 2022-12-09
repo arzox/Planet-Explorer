@@ -1,3 +1,4 @@
+import random
 import pygame
 from pyscroll import PyscrollGroup
 
@@ -24,23 +25,35 @@ class Harvesting:
                 self.collide_ore = collide_ore
 
                 # lancement de la couroutine
-                self.digging = self.print_name()
+                self.digging_couroutine = self.digging_animation(self.all_sprites.get_sprites_from_layer(4)[collide_ore])
 
             elif collide_ore == self.collide_ore:
                 self.digging_time += 0.1
-                #next(self.digging)
+                next(self.digging_couroutine)
                 if self.digging_time >= 10:
                     self.all_sprites.get_sprites_from_layer(4)[collide_ore].kill()
                     self.map_layers.ores_rect.pop(collide_ore)
-                    self.digging_time = 0
-                    self.digging.close()
+                    self.stop_digging()
+                    self.digging_couroutine.close()
         else:
             self.stop_digging()
 
-    def print_name(self):
-        while True:
-            yield
-            print("5")
-
     def stop_digging(self):
         self.digging_time = 0
+
+    def digging_animation(self, ore: pygame.sprite):
+        start_pos = ore.rect.topleft
+        offset = (0, 0)
+        is_moving_right = random.choice([True, False])
+        while True:
+            yield
+            if is_moving_right:
+                offset = offset[0] + 0.5, 0
+                if offset[0] >= 2:
+                    is_moving_right = False
+            else:
+                offset = offset[0] - 0.5, 0
+                if offset[0] <= -2:
+                    is_moving_right = True
+
+            ore.position = start_pos[0] + offset[0], start_pos[1] + offset[1]
