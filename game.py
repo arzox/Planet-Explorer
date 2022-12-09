@@ -2,6 +2,7 @@ import pygame
 from pytmx.util_pygame import load_pygame
 import pyscroll
 
+from drop import Drops
 from harvesting import Harvesting
 from inventory import Inventory
 from maplayers import MapLayers
@@ -36,7 +37,8 @@ class Game:
         self.inventory = Inventory()
         self.map_layers = MapLayers(tmx_data, self.group)
         self.player = Player([player_spawn.x, player_spawn.y], build_layer=self.map_layers)
-        self.harvesting = Harvesting(self.map_layers, self.inventory, self.player, self.group)
+        self.drop = Drops(self.group)
+        self.harvesting = Harvesting(self.map_layers, self.inventory, self.player, self.group, self.drop)
 
         # definir liste de rectangle de collision
         self.walls = []
@@ -102,14 +104,21 @@ class Game:
             if event.button == pygame.BUTTON_LEFT and self.on_preview:
                 self.map_layers.set_build()
 
+    def check_collision(self):
+        if self.player.feet.collidelist(self.walls) > -1 or self.player.feet.collidelist(self.map_layers.ores_rect) > - 1 or \
+                self.player.feet.collidelist(self.map_layers.build_rects) > -1:
+            self.player.move_back()
+
+        drop_item_number = self.player.detect_rect.collidelist(self.drop.items_rect)
+        if drop_item_number > - 1:
+            self.drop.get_item(drop_item_number)
+
     def on_loop(self):
         self.player.save_location()
         self.handle_input()
         self.group.update()
 
-        if self.player.feet.collidelist(self.walls) > -1 or self.player.feet.collidelist(self.map_layers.ores_rect) > - 1 or \
-                self.player.feet.collidelist(self.map_layers.build_rects) > -1:
-            self.player.move_back()
+        self.check_collision()
 
         self.group.center(self.player.rect)
         self.group.draw(self.screen)

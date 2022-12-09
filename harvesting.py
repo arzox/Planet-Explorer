@@ -1,18 +1,19 @@
 import random
 import pygame
 from pyscroll import PyscrollGroup
-
+from drop import Drops
 from inventory import Inventory
 from maplayers import MapLayers, IronOre
 from player import Player
 
 
 class Harvesting:
-    def __init__(self, map_layers: MapLayers, inventory: Inventory, player: Player, all_sprites: PyscrollGroup):
+    def __init__(self, map_layers: MapLayers, inventory: Inventory, player: Player, all_sprites: PyscrollGroup, drop: Drops):
         self.map_layers = map_layers
         self.inventory = inventory
         self.player = player
         self.all_sprites = all_sprites
+        self.drop = drop
 
         self.digging_time = 0
         self.collide_ore = -1
@@ -23,7 +24,6 @@ class Harvesting:
             if self.digging_time == 0:
                 self.digging_time += 0.1
                 self.collide_ore = collide_ore
-
                 # lancement de la couroutine
                 self.digging_couroutine = self.digging_animation(self.all_sprites.get_sprites_from_layer(4)[collide_ore])
 
@@ -31,12 +31,17 @@ class Harvesting:
                 self.digging_time += 0.1
                 next(self.digging_couroutine)
                 if self.digging_time >= 10:
-                    self.all_sprites.get_sprites_from_layer(4)[collide_ore].kill()
-                    self.map_layers.ores_rect.pop(collide_ore)
-                    self.stop_digging()
-                    self.digging_couroutine.close()
+                    self.finsish_digging()
         else:
             self.stop_digging()
+
+    def finsish_digging(self):
+        self.all_sprites.get_sprites_from_layer(4)[self.collide_ore].kill()
+        self.stop_digging()
+        self.digging_couroutine.close()
+
+        self.drop.drop_item("", self.map_layers.ores_rect[self.collide_ore].topleft)
+        self.map_layers.ores_rect.pop(self.collide_ore)
 
     def stop_digging(self):
         self.digging_time = 0
@@ -49,11 +54,11 @@ class Harvesting:
             yield
             if is_moving_right:
                 offset = offset[0] + 0.5, 0
-                if offset[0] >= 2:
+                if offset[0] >= 1:
                     is_moving_right = False
             else:
                 offset = offset[0] - 0.5, 0
-                if offset[0] <= -2:
+                if offset[0] <= -1:
                     is_moving_right = True
 
             ore.position = start_pos[0] + offset[0], start_pos[1] + offset[1]
