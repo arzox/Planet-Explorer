@@ -36,7 +36,7 @@ class Game:
         self.inventory = Inventory()
         self.map_layers = MapLayers(tmx_data, self.group)
         self.player = Player([player_spawn.x, player_spawn.y], build_layer=self.map_layers)
-        self.harvesting = Harvesting(self.map_layers, self.inventory, self.player)
+        self.harvesting = Harvesting(self.map_layers, self.inventory, self.player, self.group)
 
         # definir liste de rectangle de collision
         self.walls = []
@@ -75,6 +75,8 @@ class Game:
             if event.key == pygame.K_x:
                 self.map_layers.remove_build_preview()
                 self.on_preview = False
+            if event.key == pygame.K_r:
+                self.harvesting.stop_digging()
 
             # Inventaire
             if event.key == pygame.K_1:
@@ -105,8 +107,8 @@ class Game:
         self.handle_input()
         self.group.update()
 
-        if self.player.feet.collidelist(self.walls) > -1 or self.player.feet.collidelist(
-                self.map_layers.ores_rect) > -1 or self.player.feet.collidelist(self.map_layers.build_rects) > -1:
+        if self.player.feet.collidelist(self.walls) > -1 or self.player.feet.collidelist(self.map_layers.ores_rect) > - 1 or \
+                self.player.feet.collidelist(self.map_layers.build_rects) > -1:
             self.player.move_back()
 
         self.group.center(self.player.rect)
