@@ -1,4 +1,4 @@
-import pygame
+from common import *
 from pyscroll import PyscrollGroup
 
 from items import Items

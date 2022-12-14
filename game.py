@@ -1,7 +1,6 @@
 from common import *
 
 from drop import Drops
-import sys
 from harvesting import Harvesting
 from inventory import Inventory
 from maplayers import MapLayers

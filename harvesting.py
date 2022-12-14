@@ -1,6 +1,4 @@
-import random
-import pygame
-from pyscroll import PyscrollGroup
+from common import *
 
 import items
 from drop import Drops

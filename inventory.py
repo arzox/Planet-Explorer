@@ -1,4 +1,4 @@
-import pygame
+from common import *
 from items import Items
 
 

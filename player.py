@@ -1,4 +1,4 @@
-import pygame
+from common import *
 import maplayers
 
 class Player(pygame.sprite.Sprite):

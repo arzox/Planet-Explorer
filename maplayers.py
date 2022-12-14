@@ -1,5 +1,5 @@
-import pygame
-import pytmx
+from common import *
+
 from building import Building
 
 

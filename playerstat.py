@@ -1,4 +1,4 @@
-import pygame
+from common import *
 
 class Playerstat(pygame.sprite.Sprite):
     def __init__(self, game):
