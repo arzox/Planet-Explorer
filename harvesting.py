@@ -1,4 +1,4 @@
-import pygame
+
 
 from inventory import Inventory
 from maplayers import MapLayers

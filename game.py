@@ -1,8 +1,5 @@
-import pygame, sys
-from pytmx.util_pygame import load_pygame
-import pyscroll
+from common import *
 
-import playerstat
 from harvesting import Harvesting
 from inventory import Inventory
 from maplayers import MapLayers
@@ -130,7 +127,6 @@ class Game:
         self.playerstat.update(self.screen)
         self.playerstat.wait_oxy()
         self.playerstat.wait_eat()
-
 
     def on_render(self):
         pygame.display.flip()

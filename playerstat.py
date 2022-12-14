@@ -12,7 +12,7 @@ class Playerstat(pygame.sprite.Sprite):
         self.last_oxy = pygame.time.get_ticks()
         self.last_eat = pygame.time.get_ticks()
         self.cooldown_oxy = 3000
-        self.cooldown_eat = 5000
+        self.cooldown_eat = 20000
         self.full_heart = pygame.image.load('assets/hearth/full_heart.png').convert_alpha()
         self.half_heart = pygame.image.load('assets/hearth/half_heart.png').convert_alpha()
         self.empty_heart = pygame.image.load('assets/hearth/empty_heart.png').convert_alpha()
