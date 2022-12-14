@@ -65,7 +65,8 @@ class MapLayers:
         self.tile_size = self.tmx_data.tileheight
 
         self.build_rects = []
-        self.ores_rect = []
+        self.ores_rects = []
+        self.walls_rects = []
 
         # creer la tile de previsualisation
         self.build_position = [0, 0]
@@ -73,6 +74,7 @@ class MapLayers:
 
         self.create_map_layer_grid()
         self.spawn_ore()
+        self.create_walls_rect()
 
     # creer une table de la carte avec les tiles de sol
     def create_map_layer_grid(self):
@@ -82,6 +84,11 @@ class MapLayers:
             self.grid[y][x].append('B')
         for x, y, _ in self.tmx_data.get_layer_by_name("ores").tiles():
             self.grid[y][x].append('O')
+
+    def create_walls_rect(self):
+        for obj in self.tmx_data.objects:
+            if obj.name == "collision":
+                self.walls_rects.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
 
     # verifie si le build est possible
     def check_buildable(self):
@@ -115,7 +122,7 @@ class MapLayers:
                     # fait apparaitre le minerai
                     ore = IronOre(pos=(x * self.tile_size, y * self.tile_size), )
                     self.all_sprite.add(ore, layer=4)
-                    self.ores_rect.append(ore.rect)
+                    self.ores_rects.append(ore.rect)
 
     # fait apparaitre la previsualisation
     def set_build_preview(self):

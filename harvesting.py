@@ -21,7 +21,7 @@ class Harvesting:
         self.collide_ore = -1
 
     def digging(self):
-        collide_ore = self.player.detect_rect.collidelist(self.map_layers.ores_rect)
+        collide_ore = self.player.detect_rect.collidelist(self.map_layers.ores_rects)
         if - 1 < collide_ore:
             if self.digging_time == 0:
                 self.digging_time += 0.1
@@ -42,8 +42,8 @@ class Harvesting:
         self.stop_digging()
         self.digging_couroutine.close()
 
-        self.drop.drop_item(self.map_layers.ores_rect[self.collide_ore].topleft, items.Items.IRON_ORE)
-        self.map_layers.ores_rect.pop(self.collide_ore)
+        self.drop.drop_item(self.map_layers.ores_rects[self.collide_ore].topleft, items.Items.IRON_ORE)
+        self.map_layers.ores_rects.pop(self.collide_ore)
 
     def stop_digging(self):
         self.digging_time = 0

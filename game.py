@@ -3,7 +3,7 @@ from pytmx.util_pygame import load_pygame
 import pyscroll
 
 from drop import Drops
-import playerstat
+import sys
 from harvesting import Harvesting
 from inventory import Inventory
 from maplayers import MapLayers
@@ -19,6 +19,8 @@ class Game:
         self.size = self.weight, self.height = 1080, 720
 
         self.on_preview = False
+        self.last = pygame.time.get_ticks()
+        self.cooldown = 3000
 
     def on_init(self):
         pygame.init()
@@ -42,14 +44,6 @@ class Game:
         self.drop = Drops(self.group)
         self.harvesting = Harvesting(self.map_layers, self.inventory, self.player, self.group, self.drop)
         self.playerstat = Playerstat(self)
-        self.harvesting = Harvesting(self.map_layers, self.inventory, self.player)
-
-        # definir liste de rectangle de collision
-        self.walls = []
-
-        for obj in tmx_data.objects:
-            if obj.name == "collision":
-                self.walls.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
 
         # dessiner groupe de calque
         self.group.add(self.player, layer=10)
@@ -85,30 +79,21 @@ class Game:
                 self.harvesting.stop_digging()
 
             # Inventaire
-            if event.key == pygame.K_1:
-                self.inventory.select_slot(1)
-            if event.key == pygame.K_2:
-                self.inventory.select_slot(2)
-            if event.key == pygame.K_3:
-                self.inventory.select_slot(3)
-            if event.key == pygame.K_4:
-                self.inventory.select_slot(4)
-            if event.key == pygame.K_5:
-                self.inventory.select_slot(5)
-            if event.key == pygame.K_6:
-                self.inventory.select_slot(6)
-            if event.key == pygame.K_7:
-                self.inventory.select_slot(7)
-            if event.key == pygame.K_8:
-                self.inventory.select_slot(8)
-            if event.key == pygame.K_9:
-                self.inventory.select_slot(9)
+            if event.key == pygame.K_1: self.inventory.select_slot(1)
+            if event.key == pygame.K_2: self.inventory.select_slot(2)
+            if event.key == pygame.K_3: self.inventory.select_slot(3)
+            if event.key == pygame.K_4: self.inventory.select_slot(4)
+            if event.key == pygame.K_5: self.inventory.select_slot(5)
+            if event.key == pygame.K_6: self.inventory.select_slot(6)
+            if event.key == pygame.K_7: self.inventory.select_slot(7)
+            if event.key == pygame.K_8: self.inventory.select_slot(8)
+            if event.key == pygame.K_9: self.inventory.select_slot(9)
 
         if event.type == pygame.MOUSEBUTTONUP:
             if event.button == pygame.BUTTON_LEFT and self.on_preview:
                 self.map_layers.set_build()
 
-        #tests barres
+        # tests barres
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_m:
                 self.playerstat.get_health()
@@ -119,12 +104,14 @@ class Game:
                 self.playerstat.regen_oxy()
 
     def check_collision(self):
-        if self.player.feet.collidelist(self.walls) > -1 or self.player.feet.collidelist(self.map_layers.ores_rect) > - 1 or \
+        if self.player.feet.collidelist(self.map_layers.walls_rects) > -1 or self.player.feet.collidelist(
+                self.map_layers.ores_rects) > - 1 or \
                 self.player.feet.collidelist(self.map_layers.build_rects) > -1:
             self.player.move_back()
 
         drop_item_number = self.player.feet.collidelist(self.drop.items_rect)
         if drop_item_number > - 1:
+            self.drop.items_rect.pop(drop_item_number)
             self.drop.get_item(drop_item_number)
 
     def on_loop(self):
@@ -137,7 +124,7 @@ class Game:
         self.group.center(self.player.rect)
         self.group.draw(self.screen)
         self.inventory.display(self.screen)
-        self.playerstat.update(self.screen)
+        #self.playerstat.update(self.screen)
 
     def on_render(self):
         pygame.display.flip()
@@ -162,4 +149,3 @@ class Game:
             self.wait()
             pygame.time.Clock().tick(60)
         self.on_cleanup()
-
