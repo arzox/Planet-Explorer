@@ -17,7 +17,7 @@
 * Lumière
 * Jour/Nuit
 * Pods De Survie a aller découvrir
-* Histoire
+* [Histoire](https://docs.google.com/document/d/1AxvbyKZ5Jin44y_oWlcTNjRpoD6kMZpgmT1WQLTaXlk/edit?usp=sharing)
 * Décollage pour finir le jeu
 * Agriculture
 * Barre de Faim/Oxygène

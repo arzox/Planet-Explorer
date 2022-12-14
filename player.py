@@ -17,6 +17,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.speed = 3
         self.feet = pygame.Rect(0, 0, self.rect.width / 3, 12)
+        self.detect_rect = pygame.Rect(0, 0, self.rect.width * 1.5, self.rect.height * 1.5)
         self.old_position = self.position.copy()
 
         # interactions
@@ -25,6 +26,7 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.rect.topleft = self.position
         self.feet.midbottom = self.rect.midbottom
+        self.detect_rect.center = self.rect.center
 
         direction = list(self.images.keys())[list(self.images.values()).index(self.image)]
         self.build_layer.set_build_position(direction, self.position)
@@ -33,6 +35,7 @@ class Player(pygame.sprite.Sprite):
         self.position = self.old_position
         self.rect.topleft = self.position
         self.feet.midbottom = self.rect.midbottom
+        self.detect_rect.center = self.rect.center
 
     def save_location(self):
         self.old_position = self.position.copy()
