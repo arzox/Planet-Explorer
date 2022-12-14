@@ -109,7 +109,7 @@ class Game:
                 self.player.feet.collidelist(self.map_layers.build_rects) > -1:
             self.player.move_back()
 
-        drop_item_number = self.player.detect_rect.collidelist(self.drop.items_rect)
+        drop_item_number = self.player.feet.collidelist(self.drop.items_rect)
         if drop_item_number > - 1:
             self.drop.get_item(drop_item_number)
 

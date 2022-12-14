@@ -1,6 +1,8 @@
 import random
 import pygame
 from pyscroll import PyscrollGroup
+
+import items
 from drop import Drops
 from inventory import Inventory
 from maplayers import MapLayers, IronOre
@@ -40,7 +42,7 @@ class Harvesting:
         self.stop_digging()
         self.digging_couroutine.close()
 
-        self.drop.drop_item("", self.map_layers.ores_rect[self.collide_ore].topleft)
+        self.drop.drop_item(self.map_layers.ores_rect[self.collide_ore].topleft, items.Items.IRON_ORE)
         self.map_layers.ores_rect.pop(self.collide_ore)
 
     def stop_digging(self):
