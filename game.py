@@ -7,6 +7,8 @@ from inventory import Inventory
 from maplayers import MapLayers
 from player import Player
 
+from items import Items
+
 
 class Game:
     def __init__(self):
@@ -47,6 +49,10 @@ class Game:
 
         # dessiner groupe de calque
         self.group.add(self.player, layer=10)
+
+        self.inventory.try_to_add_item_in_slot(Items.PICKAXE)
+        self.inventory.try_to_add_item_in_slot(Items.PICKAXE)
+        self.inventory.try_to_add_item_in_slot(Items.PICKAXE)
 
     def handle_input(self):
         pressed = pygame.key.get_pressed()

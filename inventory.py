@@ -8,47 +8,46 @@ class Slot(pygame.sprite.Sprite):
         super().__init__()
 
         self.id_slot = id_slot
-        self.counter = None
+        self.counter = 0
         self.item = None
-        self.is_empty = True
         self.is_selected = False
-        self.image = pygame.image.load('assets/inventory/default.jpg').convert()
+        self.image = pygame.image.load('assets/inventory/tile.png').convert()
         self.rect = self.image.get_rect()
+
+        tile_deselected = pygame.image.load('assets/inventory/tile_deselected.png').convert_alpha()
+        self.image.blit(tile_deselected, tile_deselected.get_rect())
 
     def set_position(self, position: (int, int)):
         self.rect.x, self.rect.y = position
 
     def add_item(self, item: Items):
-        if self.is_empty:
-            print(item.value["image"])
-            self.image = pygame.image.load('assets/image/items/Pickaxe.png').convert()
+        image = pygame.image.load(item.value["image"]).convert_alpha()
+        self.image.blit(image, (5, 5))
 
-            self.item = item
-            self.is_empty = False
-            self.counter = 1
-        elif not self.is_empty and item.value["name"] == self.item:
-            self.counter += 1
+        self.item = item
+        self.counter = 1
 
     def remove_item(self):
         item_removed = self.item
         self.item = None
-        self.is_empty = True
         self.image = pygame.image.load('assets/inventory/default.jpg').convert()
         self.counter = 0
         return item_removed
 
     def select_slot(self):
-        print(self.id_slot)
-        if self.is_selected:
-            self.is_selected = False
-            self.image = pygame.image.load('assets/inventory/default.jpg').convert()
-        else:
-            self.is_selected = True
-            self.image = pygame.image.load('assets/inventory/tile_selected.jpg').convert()
+        self.is_selected = True
+        tile_selected = pygame.image.load('assets/inventory/tile_selected.png').convert_alpha()
+        self.image.blit(tile_selected, self.image.get_rect())
 
     def deselect_slot(self):
         self.is_selected = False
-        self.image = pygame.image.load('assets/inventory/default.jpg').convert()
+        tile_deselected = pygame.image.load('assets/inventory/tile_deselected.png').convert_alpha()
+        self.image.blit(tile_deselected, self.image.get_rect())
+
+    def draw_counter(self):
+        font = pygame.font.SysFont('arial', 20)
+        text = font.render(str(self.counter), True, (0, 0, 0))
+        self.image.blit(text, (50, 40))
 
 
 class Inventory:
@@ -60,7 +59,7 @@ class Inventory:
         self.create_slots()
 
         # Sélectionne le premier slot de l'inventaire au début du jeu
-        #self.slots[0].select_slot()
+        self.slots[0].select_slot()
 
     def create_slots(self):
         number = 9
@@ -78,11 +77,15 @@ class Inventory:
     def display(self, screen):
         for slot in self.slots:
             screen.blit(slot.image, slot.rect)
+            slot.draw_counter()
 
     def try_to_add_item_in_slot(self, item):
         for slot in self.slots:
-            if slot.is_empty:
+            if slot.item is None:
                 slot.add_item(item)
+                break
+            else:
+                slot.counter += 1
                 break
 
     def get_item(self) -> Items:
@@ -92,6 +95,5 @@ class Inventory:
         for slot in self.slots:
             if slot.id_slot == id_slot:
                 slot.select_slot()
-                self.selected_slot = id_slot
             else:
                 slot.deselect_slot()
