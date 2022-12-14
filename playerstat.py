@@ -1,7 +1,7 @@
 import pygame
 
 class Playerstat(pygame.sprite.Sprite):
-    def __init__(self, game):
+    def __init__(self):
         super().__init__()
         self.health = 5
         self.max_health = 14

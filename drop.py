@@ -27,7 +27,6 @@ class Drops:
         if len(self.all_sprites.get_sprites_from_layer(7)) - 1 >= sprite_number:
             sprite = self.all_sprites.get_sprites_from_layer(7)[sprite_number]
             item = sprite.item
-            print(item.value["name"])
             sprite.kill()
 
-            # Celian ajoute l'objet dans l'inventaire
+            # Célian ajoute l'objet dans l'inventaire

@@ -43,7 +43,7 @@ class Game:
         self.player = Player([player_spawn.x, player_spawn.y], build_layer=self.map_layers)
         self.drop = Drops(self.group)
         self.harvesting = Harvesting(self.map_layers, self.inventory, self.player, self.group, self.drop)
-        self.playerstat = Playerstat(self)
+        self.playerstat = Playerstat()
 
         # dessiner groupe de calque
         self.group.add(self.player, layer=10)
