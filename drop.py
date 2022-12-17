@@ -2,6 +2,7 @@ from common import *
 from pyscroll import PyscrollGroup
 
 from items import Items
+from inventory import Inventory
 
 
 class DropItem(pygame.sprite.Sprite):
@@ -14,9 +15,10 @@ class DropItem(pygame.sprite.Sprite):
 
 
 class Drops:
-    def __init__(self, all_sprites: PyscrollGroup):
+    def __init__(self, all_sprites: PyscrollGroup, inventory: Inventory):
         self.all_sprites = all_sprites
         self.items_rect = []
+        self.inventory = inventory
 
     def drop_item(self, pos, item: Items):
         sprite = DropItem(item.value["drop_icon"], pos, item)
@@ -31,3 +33,4 @@ class Drops:
             sprite.kill()
 
             # Celian ajoute l'objet dans l'inventaire
+            self.inventory.try_to_add_item_in_slot(item)

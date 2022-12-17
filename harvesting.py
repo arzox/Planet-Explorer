@@ -8,9 +8,8 @@ from player import Player
 
 
 class Harvesting:
-    def __init__(self, map_layers: MapLayers, inventory: Inventory, player: Player, all_sprites: PyscrollGroup, drop: Drops):
+    def __init__(self, map_layers: MapLayers, player: Player, all_sprites: PyscrollGroup, drop: Drops):
         self.map_layers = map_layers
-        self.inventory = inventory
         self.player = player
         self.all_sprites = all_sprites
         self.drop = drop

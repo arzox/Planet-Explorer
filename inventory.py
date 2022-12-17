@@ -1,3 +1,5 @@
+import pygame
+
 from common import *
 from items import Items
 
@@ -13,6 +15,7 @@ class Slot(pygame.sprite.Sprite):
         self.is_selected = False
         self.image = pygame.image.load('assets/inventory/tile.png').convert()
         self.rect = self.image.get_rect()
+        self.font = pygame.font.SysFont('arial', 20)
 
         tile_deselected = pygame.image.load('assets/inventory/tile_deselected.png').convert_alpha()
         self.image.blit(tile_deselected, tile_deselected.get_rect())
@@ -21,17 +24,23 @@ class Slot(pygame.sprite.Sprite):
         self.rect.x, self.rect.y = position
 
     def add_item(self, item: Items):
-        image = pygame.image.load(item.value["image"]).convert_alpha()
-        self.image.blit(image, (5, 5))
+        image = pygame.image.load(item.value["inventory_icon"]).convert_alpha()
+        placement = (5, 5)
+        if item.value["name"] == "iron ore":
+            image = pygame.transform.scale(image, (38, 38))
+            placement = (12, 0)
+        self.image.blit(image, placement)
 
         self.item = item
         self.counter = 1
 
     def remove_item(self):
         item_removed = self.item
-        self.item = None
-        self.image = pygame.image.load('assets/inventory/default.jpg').convert()
-        self.counter = 0
+        if self.counter == 0:
+            self.item = None
+            self.image = pygame.image.load('assets/inventory/tile.png').convert()
+        else:
+            self.counter -= 1
         return item_removed
 
     def select_slot(self):
@@ -45,8 +54,8 @@ class Slot(pygame.sprite.Sprite):
         self.image.blit(tile_deselected, self.image.get_rect())
 
     def draw_counter(self):
-        font = pygame.font.SysFont('arial', 20)
-        text = font.render(str(self.counter), True, (0, 0, 0))
+        pygame.draw.rect(self.image, (255, 255, 255), (45, 45, 15, 15))
+        text = self.font.render(str(self.counter), True, (0, 0, 0))
         self.image.blit(text, (50, 40))
 
 
@@ -78,13 +87,14 @@ class Inventory:
         for slot in self.slots:
             screen.blit(slot.image, slot.rect)
             slot.draw_counter()
+            #pass
 
-    def try_to_add_item_in_slot(self, item):
+    def try_to_add_item_in_slot(self, item: Items):
         for slot in self.slots:
             if slot.item is None:
                 slot.add_item(item)
                 break
-            else:
+            elif slot.item == item:
                 slot.counter += 1
                 break
 

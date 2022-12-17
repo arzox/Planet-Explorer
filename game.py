@@ -37,8 +37,8 @@ class Game:
         self.inventory = Inventory()
         self.map_layers = MapLayers(tmx_data, self.group)
         self.player = Player([player_spawn.x, player_spawn.y], build_layer=self.map_layers)
-        self.drop = Drops(self.group)
-        self.harvesting = Harvesting(self.map_layers, self.inventory, self.player, self.group, self.drop)
+        self.drop = Drops(self.group, self.inventory)
+        self.harvesting = Harvesting(self.map_layers, self.player, self.group, self.drop)
         self.playerstat = Playerstat(self)
 
         # dessiner groupe de calque
@@ -47,6 +47,7 @@ class Game:
         self.inventory.try_to_add_item_in_slot(Items.PICKAXE)
         self.inventory.try_to_add_item_in_slot(Items.PICKAXE)
         self.inventory.try_to_add_item_in_slot(Items.PICKAXE)
+        self.inventory.try_to_add_item_in_slot(Items.IRON_ORE)
 
     def handle_input(self):
         pressed = pygame.key.get_pressed()
