@@ -15,6 +15,7 @@ class Game:
         self.screen = None
         self.size = self.weight, self.height = 1080, 720
         self.on_preview = False
+        self.waiting = 0
 
     def on_init(self):
         pygame.init()
@@ -105,6 +106,10 @@ class Game:
                 titlescreen = TitleScreen()
                 titlescreen.on_execute()
 
+    def change_wait(self):
+        self.waiting = 1
+        return self.waiting
+
     def check_collision(self):
         if self.player.feet.collidelist(self.map_layers.walls_rects) > -1 or self.player.feet.collidelist(
                 self.map_layers.ores_rects) > - 1 or \
@@ -127,9 +132,10 @@ class Game:
         self.group.draw(self.screen)
         self.inventory.display(self.screen)
         self.playerstat.update(self.screen)
-        self.playerstat.wait_oxy()
-        self.playerstat.wait_eat()
-        self.playerstat.wait_death()
+        if self.waiting == 0:
+            self.playerstat.wait_oxy()
+            self.playerstat.wait_eat()
+            self.playerstat.wait_death()
 
     def on_render(self):
         pygame.display.flip()

@@ -9,15 +9,17 @@ class TitleScreen:
         self.is_running = None
         self.screen = None
         self.size = self.weight, self.height = 1080, 720
-        text = sans_font.render("The GoosMooner", True, (255, 255, 255))
-        goose = pygame.image.load("assets/player/goose.png").convert_alpha()
+        text = sans_font.render("The MoonGooser", True, (255, 255, 255))
+        self.goose = pygame.image.load("assets/player/goose.png").convert_alpha()
+
+        self.game = Game()
 
         # Crée l'image du titre et le centre sur l'écran
         title_size = (576, 64)
         self.title = pygame.Surface(title_size)
-        self.title.blit(goose, (0, 0))
+        self.title.blit(self.goose, (0, 0))
         self.title.blit(text, (64, -16))
-        self.title.blit(goose, (title_size[0] - 55, 0))
+        self.title.blit(self.goose, (title_size[0] - 55, 0))
         self.title_position = (250, 100)
 
         # Menu principal et boutons
@@ -25,20 +27,26 @@ class TitleScreen:
         self.menu = pygame.sprite.Group()
         self.menu.add(
             PushButton("Nouvelle Partie", button_size, (300, 288), self.play),
+            PushButton("God Mode", button_size, (450, 398), self.play_god),
             PushButton("Quitter Jeu", button_size, (600, 288), self.stop)
         )
 
     def on_init(self):
         pygame.init()
-        pygame.display.set_caption("Planet Explorer")
+        pygame.display.set_caption("The MoonGooser")
+        pygame.display.set_icon(self.goose)
+
         self.screen = pygame.display.set_mode(self.size)
         self.is_running = True
 
     def play(self):
         game = Game()
         game.on_execute()
-        self.is_running = False
 
+    def play_god(self):
+        game = Game()
+        game.change_wait()
+        game.on_execute()
 
     def on_event(self, event):
         self.menu.update(event)
