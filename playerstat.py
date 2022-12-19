@@ -3,7 +3,7 @@ from common import *
 class Playerstat(pygame.sprite.Sprite):
     def __init__(self, game):
         super().__init__()
-        self.health = 5
+        self.health = 14
         self.max_health = 14
         self.taux_oxygene = 7
         self.max_taux_oxygene = 7
@@ -11,8 +11,10 @@ class Playerstat(pygame.sprite.Sprite):
         self.max_nouriture = 7
         self.last_oxy = pygame.time.get_ticks()
         self.last_eat = pygame.time.get_ticks()
+        self.last_hearth = pygame.time.get_ticks()
         self.cooldown_oxy = 3000
         self.cooldown_eat = 20000
+        self.cooldown_hearth = 1000
         self.full_heart = pygame.image.load('assets/hearth/full_heart.png').convert_alpha()
         self.half_heart = pygame.image.load('assets/hearth/half_heart.png').convert_alpha()
         self.empty_heart = pygame.image.load('assets/hearth/empty_heart.png').convert_alpha()
@@ -87,6 +89,13 @@ class Playerstat(pygame.sprite.Sprite):
         if now - self.last_eat >= self.cooldown_eat:
             self.last_eat = now
             self.loose_eat()
+
+    def wait_death(self):
+        now = pygame.time.get_ticks()
+        if self.taux_oxygene == 0:
+            if now - self.last_hearth >= self.cooldown_hearth:
+                self.last_hearth = now
+                self.get_damage()
 
     def update(self, screen):
         self.half_hearts(screen)

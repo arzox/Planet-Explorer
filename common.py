@@ -1,5 +1,6 @@
 import pygame
-import pygame, sys
+import pygame
+import sys
 import pytmx
 from pytmx.util_pygame import load_pygame
 import pyscroll
@@ -27,6 +28,8 @@ push_buttons_colors = {
 #polices d'ecriture
 default_font = pygame.font.Font(None, 30)
 debug_font = pygame.font.SysFont("consolas", 20)
+sans_font = pygame.font.SysFont("Comic Sans MS", 60)
+
 
 def center_width(width: int, container: int):
     """
@@ -62,77 +65,7 @@ def center_surface(surface: pygame.Surface, container: pygame.Surface) -> (int, 
         center_height(content_height, container_height)
     )
 
-class Application(abc.ABC):
-    """
-    Classe abstraite représentant une application.
-    Toutes les méthodes de cette classe ne sont abstraites (comme la méthode __init__).
-    Une classe implémentant cette interface devra alors avoir une méthode display, qui se charge de l'affichage,
-    une méthode quit qui se charge de quitter l'application et une méthode start que se charge su démarrage
-    de l'application.
-    """
 
-    def __init__(self, __screen: pygame.Surface, task: type):
-        """
-        Construit une nouvelle instance d'une application avec des attributs par défaut.
-        Une application doit avoir un écran, une tâche et une tâche par défaut.
-        """
-        self.screen = __screen
-        self.default_task: type = task
-        self.task: Task = self.default_task(self)
-
-    @abc.abstractmethod
-    def display(self):
-        """
-        Méthode abstraite à implémenter servant à l'affichage de l'application sur un écran.
-        """
-        pass
-
-    @abc.abstractmethod
-    def quit(self):
-        """
-        Méthode abstraite à implémenter qui ferme l'application en cours.
-        """
-        pass
-
-    @abc.abstractmethod
-    def start(self):
-        """
-        Méthode abstraite à implémenter qui démarre l'application en cours.
-        """
-        pass
-class Task(abc.ABC):
-    """
-    Classe abstraite représentant une tâche.
-    Toutes les méthodes de cette classe ne sont abstraites (comme la méthode __init__).
-    Une classe implémentant cette interface, devra alors avoir une méthode display,
-    qui se charge de l'affichage, ainsi que d'une méthode update, avec un argument 'event',
-    qui se charge de l'actualisation de la tâche.
-    """
-
-    def __init__(self, app: 'Application'):
-        """
-        Construit une nouvelle instance d'une tâche avec des attributs par défaut.
-        Une tâche doit être associée avec une application.
-        """
-        self.app = app
-
-    @abc.abstractmethod
-    def display(self):
-        """
-        Méthode appelée lors de l'affichage de la tâche.
-        L'affichage de la tâche correspond à l'affichage de tous ses composants.
-        Cette méthode est abstraite et lèvera une exception si elle n'est pas recouverte.
-        """
-        pass
-
-    @abc.abstractmethod
-    def update(self, event: pygame.event.Event):
-        """
-        Méthode appelée lors de l'actualisation de la tâche, avec en paramètre un évènement pygame
-        (click de souris, touche pressée/levée ...).
-        Cette méthode est abstraite et lèvera une exception si elle n'est pas recouverte.
-        """
-        pass
 class Button(pygame.sprite.Sprite):
     """
     Une classe représentant un bouton cliquable.

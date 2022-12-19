@@ -97,6 +97,14 @@ class Game:
             if event.key == pygame.K_p:
                 self.playerstat.regen_oxy()
 
+        #retour barre d'accueil
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                self._running = False
+                from titlescreen import TitleScreen
+                titlescreen = TitleScreen()
+                titlescreen.on_execute()
+
     def check_collision(self):
         if self.player.feet.collidelist(self.map_layers.walls_rects) > -1 or self.player.feet.collidelist(
                 self.map_layers.ores_rects) > - 1 or \
@@ -121,6 +129,7 @@ class Game:
         self.playerstat.update(self.screen)
         self.playerstat.wait_oxy()
         self.playerstat.wait_eat()
+        self.playerstat.wait_death()
 
     def on_render(self):
         pygame.display.flip()
