@@ -105,6 +105,9 @@ class Playerstat(pygame.sprite.Sprite):
     def get_death(self):
         if self.health == 0:
             screen.blit(self.gameover, (0, 0))
+            pygame.mixer.init()
+            pygame.mixer.music.load('assets/song/bruit_GO.wav')
+            pygame.mixer.music.play()
             pygame.display.flip()
             pygame.time.wait(2000)
             self.restart()
