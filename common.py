@@ -1,5 +1,4 @@
 import pygame
-import pygame
 import sys
 import pytmx
 from pytmx.util_pygame import load_pygame

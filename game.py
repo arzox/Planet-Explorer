@@ -136,6 +136,7 @@ class Game:
             self.playerstat.wait_oxy()
             self.playerstat.wait_eat()
             self.playerstat.wait_death()
+            self.playerstat.get_death()
 
     def on_render(self):
         pygame.display.flip()

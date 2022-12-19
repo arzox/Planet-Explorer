@@ -1,3 +1,5 @@
+import pygame.time
+
 from common import *
 
 class Playerstat(pygame.sprite.Sprite):
@@ -12,7 +14,7 @@ class Playerstat(pygame.sprite.Sprite):
         self.last_oxy = pygame.time.get_ticks()
         self.last_eat = pygame.time.get_ticks()
         self.last_hearth = pygame.time.get_ticks()
-        self.cooldown_oxy = 3000
+        self.cooldown_oxy = 2000
         self.cooldown_eat = 20000
         self.cooldown_hearth = 1000
         self.full_heart = pygame.image.load('assets/hearth/full_heart.png').convert_alpha()
@@ -20,6 +22,9 @@ class Playerstat(pygame.sprite.Sprite):
         self.empty_heart = pygame.image.load('assets/hearth/empty_heart.png').convert_alpha()
         self.full_oxygene = pygame.image.load('assets/hearth/oxygen.png').convert_alpha()
         self.full_steak = pygame.image.load('assets/hearth/steak.png').convert_alpha()
+        self.gameover = pygame.image.load('assets/hearth/gameover.jpg').convert_alpha()
+        self.gameover = pygame.transform.scale(self.gameover, (1080, 720))
+
 
     def get_damage(self):
         if self.health > 0:
@@ -96,6 +101,18 @@ class Playerstat(pygame.sprite.Sprite):
             if now - self.last_hearth >= self.cooldown_hearth:
                 self.last_hearth = now
                 self.get_damage()
+
+    def get_death(self):
+        if self.health == 0:
+            screen.blit(self.gameover, (0, 0))
+            pygame.display.flip()
+            pygame.time.wait(2000)
+            self.restart()
+
+    def restart(self):
+        from titlescreen import TitleScreen
+        titlescreen = TitleScreen()
+        titlescreen.on_execute()
 
     def update(self, screen):
         self.half_hearts(screen)
